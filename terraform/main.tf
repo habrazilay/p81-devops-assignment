@@ -96,7 +96,7 @@ resource "aws_s3_bucket" "terraform_state" {
 
   tags = {
     Name = "TerraformState"
-    Environment = var.tag.environment
+    Environment = var.tags.environment
   }
 }
 
@@ -113,7 +113,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
 
   tags = {
     Name = "TerraformLocks"
-    Environment = var.tag.environment
+    Environment = var.tags.environment
   }
 }
 

@@ -36,10 +36,14 @@ jobs:
           chmod +x terragrunt_bin
           sudo mv terragrunt_bin /usr/local/bin/terragrunt
 
+      - name: Set TERRAGRUNT_TFPATH
+        run: |
+          echo "TERRAGRUNT_TFPATH=$(which terraform)" >> $GITHUB_ENV
+
       # Step 5: Initialize Terragrunt to set up the working directory
       - name: Initialize Terragrunt
         working-directory: my_terragrunt
-        run: terragrunt init
+        run: TERRAGRUNT_TFPATH=$(which terraform) terragrunt init
 
       # Step 6: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt

@@ -33,16 +33,13 @@ jobs:
         run: echo "TERRAGRUNT_TFPATH=$(which terraform)" >> $GITHUB_ENV
       
       - name: Initialize Terragrunt
+        working-directory: terragrunt  # Ensure this runs in the correct directory
         run: terragrunt init
         env:
           TERRAGRUNT_TFPATH: ${{ env.TERRAGRUNT_TFPATH }}
-    
-      - name: Initialize Terragrunt
-        working-directory: terragrunt
-        run: terragrunt init
 
       - name: Apply Terragrunt
-        working-directory: terragrunt
+        working-directory: terragrunt  # Ensure this runs in the correct directory
         run: terragrunt apply -auto-approve
 
   python:

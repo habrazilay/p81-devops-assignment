@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - main  # Trigger the workflow on pushes to the main branch
 
 jobs:
   terraform:
@@ -15,56 +15,60 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Terraform with the correct architecture binary
+      # Step 2: Set up Terraform with the correct version
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.6.1
+          terraform_version: 1.6.1  # Specifying the Terraform version to be used
 
       # Step 3: Configure AWS credentials for Terraform
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS Access Key
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS Secret Access Key
+          aws-region: eu-north-1  # Region where the infrastructure will be deployed
 
       # Step 4: Install Terragrunt
       - name: Install Terragrunt
         run: |
-          curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.52.3/terragrunt_linux_amd64
+          curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.1/terragrunt_linux_amd64
           chmod +x terragrunt
-          sudo mv terragrunt /usr/local/bin/terragrunt
+          sudo mv terragrunt /usr/local/bin/terragrunt  # Installing Terragrunt
 
       # Step 5: Verify Terraform Installation
       - name: Verify Terraform Installation
-        run: terraform version
+        run: terraform version  # Ensure Terraform is installed and recognized
 
       # Step 6: Initialize Terragrunt to set up the working directory
       - name: Initialize Terragrunt
-        working-directory: my_terragrunt
-        run: terragrunt init
+        working-directory: my_terragrunt  # Specify the directory containing terragrunt.hcl
+        run: terragrunt init  # Initialize the Terragrunt environment
 
       # Step 7: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt
-        working-directory: my_terragrunt
-        run: terragrunt apply -auto-approve
+        working-directory: my_terragrunt  # Specify the directory containing terragrunt.hcl
+        run: terragrunt apply -auto-approve  # Apply the Terraform configurations via Terragrunt
 
   python:
     name: Deploy Application Code
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04  # Use the latest Ubuntu LTS version
 
     steps:
+      # Step 1: Checkout the repository to access the codebase
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up Python environment using the latest stable version
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.x'  # Specify the Python version to use
 
+      # Step 3: Install Python dependencies from the requirements file
       - name: Install dependencies
-        run: pip install --no-cache-dir -r requirements.txt
+        run: pip install --no-cache-dir -r requirements.txt  # Install Python dependencies
 
+      # Step 4: Execute the Python script to process JSON
       - name: Run the Python script
-        run: python process_json.py
+        run: python process_json.py  # Run the custom Python script to process JSON

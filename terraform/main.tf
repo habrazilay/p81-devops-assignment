@@ -88,3 +88,32 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
     cloudfront_default_certificate = true
   }
 }
+
+## S3 Bucket for Terraform State ##
+
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = var.bucket_prefix + "-terraform-state"
+
+  tags = {
+    Name = "TerraformState"
+    Environment = var.tag.environment
+  }
+}
+
+## DynamoDB Table for State Locking ##
+resource "aws_dynamodb_table" "terraform_locks" {
+  name         = "terraform-locks"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+
+  tags = {
+    Name = "TerraformLocks"
+    Environment = var.tag.environment
+  }
+}
+

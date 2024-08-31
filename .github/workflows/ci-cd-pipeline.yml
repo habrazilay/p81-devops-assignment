@@ -16,8 +16,6 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -31,6 +29,9 @@ jobs:
 
       - name: Install Terragrunt
         run: curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.38.7/terragrunt_linux_amd64 && chmod +x terragrunt && sudo mv terragrunt /usr/local/bin/
+
+      - name: Navigate to Terragrunt directory
+        run: cd terragrant
 
       - name: Initialize Terragrunt
         run: terragrunt init

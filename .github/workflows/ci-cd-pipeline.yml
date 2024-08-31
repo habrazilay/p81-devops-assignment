@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up the specified version of Terraform (v1.6.1)
+      # Step 2: Set up Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -32,9 +32,9 @@ jobs:
       # Step 4: Install Terragrunt v0.52.3 for managing Terraform configurations
       - name: Install Terragrunt
         run: |
-          curl -L -o terragrunt_bin https://github.com/gruntwork-io/terragrunt/releases/download/v0.52.3/terragrunt_linux_amd64
-          chmod +x terragrunt_bin
-          sudo mv terragrunt_bin /usr/local/bin/terragrunt
+          curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.52.3/terragrunt_linux_amd64
+          chmod +x terragrunt
+          sudo mv terragrunt /usr/local/bin/terragrunt
 
       # Step 5: Verify Terraform Installation
       - name: Verify Terraform Installation

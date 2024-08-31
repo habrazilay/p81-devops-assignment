@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up the latest version of Terraform
+      # Step 2: Set up the specified version of Terraform (latest stable)
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -29,21 +29,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
-      # Step 4: Install Terragrunt
+      # Step 4: Install Terragrunt for managing Terraform configurations
       - name: Install Terragrunt
         run: |
-          curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.1/terragrunt_linux_amd64
-          chmod +x terragrunt
-          sudo mv terragrunt /usr/local/bin/terragrunt
+          curl -L -o terragrunt_bin https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.1/terragrunt_linux_amd64
+          chmod +x terragrunt_bin
+          sudo mv terragrunt_bin /usr/local/bin/terragrunt
 
       # Step 5: Initialize Terragrunt to set up the working directory
       - name: Initialize Terragrunt
-        working-directory: terragrunt
+        working-directory: my_terragrunt
         run: terragrunt init
 
       # Step 6: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt
-        working-directory: terragrunt
+        working-directory: my_terragrunt
         run: terragrunt apply -auto-approve
 
   python:

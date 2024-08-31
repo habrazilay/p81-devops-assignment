@@ -4,63 +4,56 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  terragrunt:
+  terraform:
     name: Deploy Infrastructure
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.3.7
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: Install Terragrunt
-      run: |
-        curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.35.10/terragrunt_linux_amd64
-        chmod +x terragrunt
-        sudo mv terragrunt /usr/local/bin/
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
 
-    - name: Initialize Terragrunt
-      run: terragrunt init
-      working-directory: ./terraform
+      - name: Install dependencies
+        run: sudo apt-get install -y unzip
 
-    - name: Apply Terragrunt
-      run: terragrunt apply -auto-approve
-      working-directory: ./terraform
+      - name: Install Terragrunt
+        run: curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.38.7/terragrunt_linux_amd64 && chmod +x terragrunt && sudo mv terragrunt /usr/local/bin/
 
-  deploy:
+      - name: Initialize Terragrunt
+        run: terragrunt init
+
+      - name: Apply Terragrunt
+        run: terragrunt apply -auto-approve
+
+  python:
     name: Deploy Application Code
     runs-on: ubuntu-latest
-    needs: terragrunt
+    needs: terraform
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: Run Python script
-      run: python process_json.py
-
-    - name: Upload to S3
-      run: |
-        aws s3 cp filtered_products.json s3://daniels-s3bucket/filtered_products.json
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Run the Python script
+        run: python process_json.py

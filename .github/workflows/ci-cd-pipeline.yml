@@ -8,18 +8,18 @@ on:
 jobs:
   terraform:
     name: Deploy Infrastructure
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       # Step 1: Checkout the repository to access the codebase
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up the specified version of Terraform (latest stable)
+      # Step 2: Set up the specified version of Terraform (v1.6.1)
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.9.5
+          terraform_version: 1.6.1
 
       # Step 3: Configure AWS credentials for Terraform
       - name: Set up AWS credentials
@@ -29,23 +29,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
-      # Step 4: Install Terragrunt for managing Terraform configurations
+      # Step 4: Install Terragrunt v0.52.3 for managing Terraform configurations
       - name: Install Terragrunt
         run: |
-          curl -L -o terragrunt_bin https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.1/terragrunt_linux_amd64
+          curl -L -o terragrunt_bin https://github.com/gruntwork-io/terragrunt/releases/download/v0.52.3/terragrunt_linux_amd64
           chmod +x terragrunt_bin
           sudo mv terragrunt_bin /usr/local/bin/terragrunt
 
-      - name: Set TERRAGRUNT_TFPATH
-        run: |
-          echo "TERRAGRUNT_TFPATH=$(which terraform)" >> $GITHUB_ENV
+      # Step 5: Verify Terraform Installation
+      - name: Verify Terraform Installation
+        run: terraform version
 
-      # Step 5: Initialize Terragrunt to set up the working directory
+      # Step 6: Initialize Terragrunt to set up the working directory
       - name: Initialize Terragrunt
         working-directory: my_terragrunt
-        run: TERRAGRUNT_TFPATH=$(which terraform) terragrunt init
+        run: terragrunt init
 
-      # Step 6: Apply Terragrunt configurations to provision infrastructure
+      # Step 7: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt
         working-directory: my_terragrunt
         run: terragrunt apply -auto-approve

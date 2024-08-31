@@ -92,8 +92,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
 ## S3 Bucket for Terraform State ##
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = var.bucket_prefix + "-terraform-state"
-
+  bucket = "${var.bucket_prefix}-terraform-state"
   tags = {
     Name = "TerraformState"
     Environment = var.tags.environment

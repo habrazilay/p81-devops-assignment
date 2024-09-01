@@ -18,8 +18,8 @@ jobs:
       # Step 2: Set up Terraform with the correct architecture binary
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_wrapper: false # Added in order to try to solve the issue Unable to determine underlying exit code, so Terragrunt will exit with error code 1
+        # with:
+        #   terraform_wrapper: false # Added in order to try to solve the issue Unable to determine underlying exit code, so Terragrunt will exit with error code 1
 
       # Step 3: Configure AWS credentials for Terraform
       - name: Set up AWS credentials
@@ -43,11 +43,12 @@ jobs:
       # Step 6: Initialize Terragrunt
         # Initialize Terragrunt with the global configuration file
       - name: Initialize Terragrunt
-        run: terragrunt init --terragrunt-config terragrunt.global.hcl
+        # run: terragrunt init --terragrunt-config terragrunt.global.hcl
+        run: terragrunt init --terragrunt-config ./my_terragrunt/terragrunt.hcl
 
       # Step 7: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt
-        run: terragrunt apply -auto-approve --terragrunt-config terragrunt.global.hcl
+        run: terragrunt apply -auto-approve --terragrunt-config ./my_terragrunt/terragrunt.hcl
 
   python:
     name: Deploy Application Code

@@ -48,8 +48,8 @@ jobs:
 
       # Step 7: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt
-        run: terragrunt apply -auto-approve --terragrunt-config terragrunt.hcl.json
-        # working-directory: ./terraform
+        run: terragrunt apply -auto-approve --terragrunt-config terragrunt.hcl
+        working-directory: terraform
 
   python:
     name: Deploy Application Code

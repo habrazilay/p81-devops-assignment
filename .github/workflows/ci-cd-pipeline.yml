@@ -34,22 +34,24 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
-          
-      # Step 5: Clean Terragrunt Cache
+
+      # Step 5: Clean Terragrunt Cache (Optional, can be removed if not necessary)
       - name: Clean Terragrunt Cache
         run: rm -rf $(terragrunt get --terragrunt-source | awk '{print $2}')
 
+      # Step 6: Initialize Terraform to download necessary plugins
+      - name: Initialize Terraform
+        run: terraform init
+        working-directory: terraform
 
-      # Step 6: Initialize Terragrunt
+      # Step 7: Initialize Terragrunt
       - name: Initialize Terragrunt
-        # run: terragrunt init
-        run: terragrunt init --terragrunt-config terragrunt.hcl 
-        # working-directory: ./terraform
+        run: terragrunt init --terragrunt-config terragrunt.hcl
 
-      # Step 7: Apply Terragrunt configurations to provision infrastructure
+      # Step 8: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt
         run: terragrunt apply -auto-approve --terragrunt-config terragrunt.hcl
-        working-directory: terraform
+        # working-directory: terraform
 
   python:
     name: Deploy Application Code

@@ -39,23 +39,18 @@ jobs:
   python:
     name: Deploy Application Code
     runs-on: ubuntu-latest
-    needs: terraform
 
     steps:
-      # Step 1: Checkout the repository to access the codebase
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python environment using the latest stable version
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      # Step 3: Install Python dependencies from the requirements file
       - name: Install dependencies
         run: pip install --no-cache-dir -r requirements.txt
 
-      # Step 4: Execute the Python script to process JSON
       - name: Run the Python script
         run: python process_json.py

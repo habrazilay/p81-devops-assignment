@@ -58,7 +58,8 @@ Activate the virtual environment:
 **Install Required Packages**:
 
 * Install `requests` for making HTTP requests and `boto3` for interacting with AWS S3:  
-  bash  
+  bash
+  `pip install requests`
   `pip install requests boto3`
 
 **Set up a Python virtual environment:**  

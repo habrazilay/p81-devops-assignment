@@ -19,7 +19,7 @@ This project is a DevOps assignment that involves setting up infrastructure usin
 
 ## Project Structure
 
-p81-devops-assignment/ 
+p81-devops-assignment/  
   ├── terraform/ # Contains Terraform configuration files  
   ├── terragrunt/ # Contains Terragrunt configuration  
   ├── venv/ # Virtual environment directory (excluded from version control)  

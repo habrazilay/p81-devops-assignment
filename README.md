@@ -21,18 +21,18 @@ This project is a DevOps assignment that involves setting up infrastructure usin
 
 p81-devops-assignment/ 
 │ 
-  ├── terraform/ # Contains Terraform configuration files
-  ├── terragrunt/ # Contains Terragrunt configuration 
-  ├── venv/ # Virtual environment directory (excluded from version control) 
-  ├── process_json.py # Python script to process JSON data 
-  ├── .github/workflows/ # GitHub Actions workflow definitions 
+  ├── terraform/ # Contains Terraform configuration files 
+  ├── terragrunt/ # Contains Terragrunt configuration   
+  ├── venv/ # Virtual environment directory (excluded from version control)   
+  ├── process_json.py # Python script to process JSON data  
+  ├── .github/workflows/ # GitHub Actions workflow definitions  
 └── README.md # This
 
 
 ## Prerequisites
 
 - [Terraform v1.9.5](https://www.terraform.io/downloads.html)
-- [Terragrunt v0.67.1](https://terragrunt.gruntwork.io/)
+- [Terragrunt v0.6.0](https://terragrunt.gruntwork.io/)
 - Python 3.x installed on your local machine
 - An AWS account with necessary IAM permissions
 

@@ -2,9 +2,9 @@ include "root" {
   path = find_in_parent_folders()
 }
 
-dependencies {
-  paths = ["./"]
-}
+# dependencies {
+#   paths = ["."]
+# }
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite"
@@ -22,6 +22,7 @@ provider "aws" {
 }
 EOF
 }
+
 terraform {
   source = "."
 

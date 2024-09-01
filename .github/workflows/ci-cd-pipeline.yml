@@ -20,6 +20,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.9.5
+          terraform_wrapper: false # Added in order to try to solve the issue Unable to determine underlying exit code, so Terragrunt will exit with error code 1
 
       # Step 3: Configure AWS credentials for Terraform
       - name: Set up AWS credentials

@@ -1,5 +1,5 @@
 terraform {
-  source = "terraform"
+  source = "."
 
   backend "s3" {
     bucket         = "daniels-s3bucket-terraform-state"

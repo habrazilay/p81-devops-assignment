@@ -8,37 +8,51 @@ on:
 jobs:
   terraform:
     name: Deploy Infrastructure
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Ensure using the correct platform
 
     steps:
       # Step 1: Checkout the repository to access the codebase
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Use Terragrunt Docker container and specify the command
-      - name: Run Terragrunt with Docker
-        run: |
-          docker run --rm \
-            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e AWS_REGION=eu-north-1 \
-            -v $(pwd):/workspace \
-            -w /workspace/my_terragrunt \
-            alpine/terragrunt:latest terragrunt init
+      # Step 2: Set up Terraform with the correct architecture binary
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.1
 
-      - name: Apply Terragrunt with Docker
+      # Step 3: Configure AWS credentials for Terraform
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      # Step 4: Install Terragrunt
+      - name: Install Terragrunt
         run: |
-          docker run --rm \
-            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e AWS_REGION=eu-north-1 \
-            -v $(pwd):/workspace \
-            -w /workspace/my_terragrunt \
-            alpine/terragrunt:latest terragrunt apply -auto-approve
+          curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.52.3/terragrunt_linux_amd64
+          chmod +x terragrunt
+          sudo mv terragrunt /usr/local/bin/terragrunt
+
+      # Step 5: Verify Terraform Installation
+      - name: Verify Terraform Installation
+        run: terraform version
+
+      # Step 6: Initialize Terragrunt to set up the working directory
+      - name: Initialize Terragrunt
+        working-directory: /
+        run: terragrunt init --terragrunt-config terragrunt.global.hcl
+
+      # Step 7: Apply Terragrunt configurations to provision infrastructure
+      - name: Apply Terragrunt
+        working-directory: /
+        run: terragrunt apply -auto-approve --terragrunt-config terragrunt.global.hcl
 
   python:
     name: Deploy Application Code
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repository

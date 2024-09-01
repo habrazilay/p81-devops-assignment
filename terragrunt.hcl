@@ -22,5 +22,5 @@ terragrunt {
   retryable_errors = ["Failed to lock state"]
   prevent_destroy  = true
   # Replace ACCOUNT_ID with your actual AWS account ID
-  # iam_role         = "arn:aws:iam::ACCOUNT_ID:role/TerragruntRole"
+  iam_role         = "arn:aws:iam::329082085800:role/TerragruntRole"
 }

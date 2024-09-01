@@ -36,18 +36,25 @@ jobs:
           chmod +x terragrunt
           sudo mv terragrunt /usr/local/bin/terragrunt
 
-      # Step 5: Verify Terraform Installation
+      # Step 5: Set TERRAGRUNT_TFPATH environment variable
+      - name: Set TERRAGRUNT_TFPATH
+        run: echo "TERRAGRUNT_TFPATH=$(which terraform)" >> $GITHUB_ENV
+
+      # Step 6: Verify Terraform Installation
       - name: Verify Terraform Installation
         run: terraform version
 
-      # Step 6: Initialize Terragrunt
-        # Initialize Terragrunt with the global configuration file
+      # Step 7: Initialize Terragrunt with the global configuration file
       - name: Initialize Terragrunt
         run: terragrunt init --terragrunt-config terragrunt.global.hcl
+        env:
+          TERRAGRUNT_TFPATH: ${{ env.TERRAGRUNT_TFPATH }}
 
-      # Step 7: Apply Terragrunt configurations to provision infrastructure
+      # Step 8: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt
         run: terragrunt apply -auto-approve --terragrunt-config terragrunt.global.hcl
+        env:
+          TERRAGRUNT_TFPATH: ${{ env.TERRAGRUNT_TFPATH }}
 
   python:
     name: Deploy Application Code

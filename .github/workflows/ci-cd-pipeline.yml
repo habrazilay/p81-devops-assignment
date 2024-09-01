@@ -37,12 +37,14 @@ jobs:
 
       # Step 5: Initialize Terragrunt
       - name: Initialize Terragrunt
-        # run: terragrunt init
-        run: terragrunt init --terragrunt-config ./terraform/terragrunt.hcl
+        run: terragrunt init
+        # run: terragrunt init --terragrunt-config ./terraform/
+        working-directory: ./terraform
 
       # Step 6: Apply Terragrunt configurations to provision infrastructure
       - name: Apply Terragrunt
-        run: terragrunt apply -auto-approve --terragrunt-config ./terraform/terragrunt.hcl
+        run: terragrunt apply -auto-approve # --terragrunt-config ./terraform/terragrunt.hcl
+        working-directory: ./terraform
 
   python:
     name: Deploy Application Code

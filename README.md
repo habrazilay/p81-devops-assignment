@@ -58,7 +58,7 @@ Activate the virtual environment:
 **Install Required Packages**:
 
 * Install `requests` for making HTTP requests and `boto3` for interacting with AWS S3:  
-  bash
+  bash  
   `pip install requests`  
   `pip install requests boto3`
 
@@ -76,7 +76,8 @@ Install Terraform and Terragrunt if they are not already installed.
 `terraform --version`  
 `terragrunt --version`
 
-* 
+* Running locally:
+`python3 process_json.py`  
 
 ## **Running the Pipeline**
 

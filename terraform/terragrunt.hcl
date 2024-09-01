@@ -1,10 +1,3 @@
-include "root" {
-  path = find_in_parent_folders()
-}
-
-# dependencies {
-#   paths = ["."]
-# }
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite"
@@ -17,6 +10,7 @@ terraform {
     }
   }
 }
+
 provider "aws" {
   region = "eu-north-1"
 }
@@ -47,5 +41,5 @@ terragrunt {
   retryable_errors = ["Failed to lock state"]
   prevent_destroy  = true
   # Replace ACCOUNT_ID with your actual AWS account ID
-  # iam_role         = "arn:aws:iam::ACCOUNT_ID:role/TerragruntRole"
+  iam_role         = "arn:aws:iam::329082085800:role/TerragruntRole"
 }

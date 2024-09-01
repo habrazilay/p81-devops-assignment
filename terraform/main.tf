@@ -1,6 +1,6 @@
-provider "aws" {
-  region = var.aws_region
-}
+#provider "aws" {
+#  region = var.aws_region
+#}
 
 resource "aws_s3_bucket" "frontend_bucket" {
   bucket = var.bucket_prefix
